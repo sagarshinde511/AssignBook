@@ -37,30 +37,6 @@ def fetch_data(book_id):
             connection.close()
 
 # Function to fetch RFidNo from the BookHistory table
-def fetch_rfid():
-    try:
-        # Establish connection to MySQL database
-        connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=passwd,
-            database=db_name
-        )
-        if connection.is_connected():
-            cursor = connection.cursor(dictionary=True)
-            # Query to fetch RFidNo from BookHistory where id matches the book_id
-            query = "SELECT RFidNo FROM BookHistory WHERE id = %s"
-            cursor.execute(query, (book_id,))
-            result = cursor.fetchone()
-            return result['RFidNo'] if result else None
-    except Error as e:
-        st.error(f"Error connecting to database: {e}")
-        return None
-    finally:
-        if connection.is_connected():
-            cursor.close()
-            connection.close()
-# Function to read QR code from camera
 def read_qr_code_from_camera():
     st.title("QR Code Scanner")
 
@@ -83,6 +59,30 @@ def read_qr_code_from_camera():
         else:
             st.warning("No QR Code detected.")
             return None
+# Function to fetch RFidNo from the BookHistory table
+def fetch_rfid(book_id):
+    try:
+        # Establish connection to MySQL database
+        connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=passwd,
+            database=db_name
+        )
+        if connection.is_connected():
+            cursor = connection.cursor(dictionary=True)
+            # Query to fetch RFidNo from BookHistory where id matches the book_id
+            query = "SELECT RFidNo FROM BookHistory WHERE id = %s"
+            cursor.execute(query, (book_id,))
+            result = cursor.fetchone()
+            return result['RFidNo'] if result else None
+    except Error as e:
+        st.error(f"Error connecting to database: {e}")
+        return None
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
 
 # Main function
 def main():
@@ -107,7 +107,7 @@ def main():
 
                 # Add a button to assign the book
                 if st.button("Assign Book"):
-                    rfid = fetch_rfid()
+                    rfid = fetch_rfid(1)  # Pass the book_id here
                     if rfid and int(rfid) != 0:
                         st.success(f"RFID Number: {rfid}")
                     else:
