@@ -37,7 +37,7 @@ def fetch_data(book_id):
             connection.close()
 
 # Function to fetch RFidNo from the BookHistory table
-def fetch_rfid(book_id):
+def fetch_rfid():
     try:
         # Establish connection to MySQL database
         connection = mysql.connector.connect(
