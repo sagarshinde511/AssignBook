@@ -72,7 +72,7 @@ def fetch_rfid(book_id):
         if connection.is_connected():
             cursor = connection.cursor(dictionary=True)
             # Query to fetch RFidNo from BookHistory where id matches the book_id
-            query = "SELECT RFidNo FROM BookHistory WHERE id = %s"
+            query = "SELECT RFidNo FROM ReadRFID WHERE id = %s"
             cursor.execute(query, (book_id,))
             result = cursor.fetchone()
             return result['RFidNo'] if result else None
