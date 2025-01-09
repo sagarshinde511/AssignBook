@@ -5,6 +5,13 @@ import numpy as np
 import mysql.connector
 from mysql.connector import Error
 
+# MySQL database connection details
+host = "82.180.143.66"
+user = "u263681140_students"
+passwd = "testStudents@123"
+db_name = "u263681140_students"
+
+
 def update_stock(book_id, new_stock):
     """
     Updates the available stock for a book in the database.
@@ -51,13 +58,6 @@ def update_stock(book_id, new_stock):
         if connection.is_connected():
             cursor.close()
             connection.close()
-
-
-# MySQL database connection details
-host = "82.180.143.66"
-user = "u263681140_students"
-passwd = "testStudents@123"
-db_name = "u263681140_students"
 
 # Function to fetch book information from the database
 def fetch_data(book_id):
