@@ -41,7 +41,7 @@ def update_stock(book_id, new_stock):
             cursor = connection.cursor()
 
             # Update the available stock for the book
-            update_query = "UPDATE books SET AvailableStock = %s WHERE BookID = %s"
+            update_query = "UPDATE BookInfo SET AvailableStock = %s WHERE id = %s"
             cursor.execute(update_query, (new_stock, book_id))
 
             # Commit the transaction
