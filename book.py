@@ -11,6 +11,11 @@ user = "u263681140_students"
 passwd = "testStudents@123"
 db_name = "u263681140_students"
 
+HOST = "82.180.143.66"
+USER = "u263681140_students"
+PASSWORD = "testStudents@123"
+DATABASE = "u263681140_students"
+
 def update_stock(book_id, new_stock):
     """
     Updates the available stock for a book in the database.
