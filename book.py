@@ -48,8 +48,8 @@ def fetch_rfid(book_id):
         )
         if connection.is_connected():
             cursor = connection.cursor(dictionary=True)
-            # Query to fetch RFidNo from BookHistory
-            query = "SELECT RFidNo FROM BookHistory WHERE id = 1"
+            # Query to fetch RFidNo from BookHistory where id matches the book_id
+            query = "SELECT RFidNo FROM BookHistory WHERE id = %s"
             cursor.execute(query, (book_id,))
             result = cursor.fetchone()
             return result['RFidNo'] if result else None
@@ -60,7 +60,6 @@ def fetch_rfid(book_id):
         if connection.is_connected():
             cursor.close()
             connection.close()
-
 # Function to read QR code from camera
 def read_qr_code_from_camera():
     st.title("QR Code Scanner")
@@ -108,7 +107,7 @@ def main():
 
                 # Add a button to assign the book
                 if st.button("Assign Book"):
-                    rfid = fetch_rfid(book_id)
+                    rfid = fetch_rfid()
                     if rfid and int(rfid) != 0:
                         st.success(f"RFID Number: {rfid}")
                     else:
