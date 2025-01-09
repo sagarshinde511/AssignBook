@@ -5,6 +5,54 @@ import numpy as np
 import mysql.connector
 from mysql.connector import Error
 
+def update_stock(book_id, new_stock):
+    """
+    Updates the available stock for a book in the database.
+
+    Args:
+        book_id (str): The ID of the book to update.
+        new_stock (int): The new stock value to set.
+
+    Returns:
+        bool: True if the update was successful, False otherwise.
+    """
+    try:
+        # Establish a connection to the database
+        connection = mysql.connector.connect(
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
+        )
+
+        if connection.is_connected():
+            cursor = connection.cursor()
+
+            # Update the available stock for the book
+            update_query = "UPDATE books SET AvailableStock = %s WHERE BookID = %s"
+            cursor.execute(update_query, (new_stock, book_id))
+
+            # Commit the transaction
+            connection.commit()
+
+            # Check if rows were affected
+            if cursor.rowcount > 0:
+                print("Stock updated successfully.")
+                return True
+            else:
+                print("Book ID not found. No update made.")
+                return False
+
+    except Error as e:
+        print(f"Error while connecting to the database: {e}")
+        return False
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+
 # MySQL database connection details
 host = "82.180.143.66"
 user = "u263681140_students"
