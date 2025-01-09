@@ -135,19 +135,25 @@ def main():
                 st.write(f"**In Stock:** {book_info['InStock']}")
                 st.write(f"**Available Stock:** {book_info['AvailableStock']}")
 
-                # Add a button to assign the book
-                if st.button("Assign Book"):
-                    rfid = fetch_rfid(1)  # Pass the book_id here
-                    if rfid and int(rfid) != 0:
-                        st.success(f"RFID Number: {rfid}")
-                        create_history(rfid, book_id)
-                        
-                    else:
-                        st.error("RFID Number is either not assigned or invalid.")
+                if int(book_info['AvailableStock']) > 0:
+                    # Add a button to assign the book
+                    if st.button("Assign Book"):
+                        rfid = fetch_rfid(book_id)  # Fetch RFID for the book
+                        if rfid and int(rfid) != 0:
+                            st.success(f"RFID Number: {rfid}")
+                            create_history(rfid, book_id)
+
+                            # Update available stock in the database
+                            new_stock = int(book_info['AvailableStock']) - 1
+                            update_stock(book_id, new_stock)
+                            st.info(f"Book assigned successfully. Updated available stock: {new_stock}")
+                        else:
+                            st.error("RFID Number is either not assigned or invalid.")
+                else:
+                    st.warning("This book is out of stock.")
             else:
                 st.error("Book information could not be retrieved. Please check the Book ID.")
         else:
             st.info("Please scan a QR code to view book information.")
-
 if __name__ == "__main__":
     main()
