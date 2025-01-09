@@ -11,7 +11,6 @@ user = "u263681140_students"
 passwd = "testStudents@123"
 db_name = "u263681140_students"
 
-
 def update_stock(book_id, new_stock):
     """
     Updates the available stock for a book in the database.
@@ -23,6 +22,7 @@ def update_stock(book_id, new_stock):
     Returns:
         bool: True if the update was successful, False otherwise.
     """
+    connection = None
     try:
         # Establish a connection to the database
         connection = mysql.connector.connect(
@@ -55,11 +55,9 @@ def update_stock(book_id, new_stock):
         return False
 
     finally:
-        if connection.is_connected():
+        if connection and connection.is_connected():
             cursor.close()
-            connection.close()
-
-# Function to fetch book information from the database
+            connection.close()# Function to fetch book information from the database
 def fetch_data(book_id):
     try:
         # Establish connection to MySQL database
