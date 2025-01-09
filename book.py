@@ -84,6 +84,36 @@ def fetch_rfid(book_id):
             cursor.close()
             connection.close()
 
+
+def create_history(rfid, book_id):
+    try:
+        # Connect to the MySQL database
+        conn = mysql.connector.connect(
+            host="82.180.143.66",
+            user="u263681140_students",
+            passwd="testStudents@123",
+            database="u263681140_students"
+        )
+        cursor = conn.cursor()
+
+        # Insert data into the BookHistory table
+        query = "INSERT INTO BookHistory (RFidNo, BookId) VALUES (%s, %s)"
+        cursor.execute(query, (rfid, book_id))
+        
+        # Commit the transaction
+        conn.commit()
+        
+        # Close the connection
+        cursor.close()
+        conn.close()
+        
+        return True  # Success
+    except mysql.connector.Error as e:
+        st.error(f"Database error: {e}")
+        return False  # Failure
+    except Exception as e:
+        st.error(f"Unexpected error: {e}")
+        return False
 # Main function
 def main():
     # Create tabs for the app
@@ -110,6 +140,8 @@ def main():
                     rfid = fetch_rfid(1)  # Pass the book_id here
                     if rfid and int(rfid) != 0:
                         st.success(f"RFID Number: {rfid}")
+                        create_history(rfid, book_id)
+                        
                     else:
                         st.error("RFID Number is either not assigned or invalid.")
             else:
